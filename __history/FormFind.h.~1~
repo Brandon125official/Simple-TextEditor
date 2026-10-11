@@ -1,0 +1,27 @@
+//---------------------------------------------------------------------------
+
+#ifndef FormFindH
+#define FormFindH
+//---------------------------------------------------------------------------
+#include <System.Classes.hpp>
+#include <Vcl.Controls.hpp>
+#include <Vcl.StdCtrls.hpp>
+#include <Vcl.Forms.hpp>
+//---------------------------------------------------------------------------
+class TFrmFind : public TForm
+{
+__published:	// IDE-managed Components
+	TLabel *Label1;
+	TLabel *Label2;
+	TEdit *txtFind;
+	TEdit *txtReplace;
+	TButton *btnFind;
+	TButton *btnReplace;
+private:	// User declarations
+public:		// User declarations
+	__fastcall TFrmFind(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TFrmFind *FrmFind;
+//---------------------------------------------------------------------------
+#endif

@@ -1,0 +1,79 @@
+object FrmFind: TFrmFind
+  Left = 0
+  Top = 0
+  BorderStyle = bsDialog
+  Caption = 'Find & Replace'
+  ClientHeight = 508
+  ClientWidth = 860
+  Color = clBtnFace
+  Font.Charset = ANSI_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -21
+  Font.Name = 'Consolas'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = FormCreate
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 24
+  object Label1: TLabel
+    Left = 24
+    Top = 32
+    Width = 144
+    Height = 24
+    Caption = 'Text to find'
+  end
+  object Label2: TLabel
+    Left = 24
+    Top = 80
+    Width = 144
+    Height = 24
+    Caption = 'Replace with'
+  end
+  object txtFind: TEdit
+    Left = 200
+    Top = 29
+    Width = 449
+    Height = 32
+    TabOrder = 0
+  end
+  object txtReplace: TEdit
+    Left = 200
+    Top = 77
+    Width = 449
+    Height = 32
+    TabOrder = 1
+  end
+  object btnFind: TButton
+    Left = 696
+    Top = 25
+    Width = 121
+    Height = 41
+    Caption = 'Find'
+    TabOrder = 2
+    OnClick = btnFindClick
+  end
+  object btnReplace: TButton
+    Left = 696
+    Top = 73
+    Width = 121
+    Height = 41
+    Caption = 'Replace'
+    TabOrder = 3
+  end
+  object Memo: TMemo
+    Left = 24
+    Top = 152
+    Width = 809
+    Height = 201
+    ReadOnly = True
+    TabOrder = 4
+  end
+  object txtPanel: TPanel
+    Left = 48
+    Top = 408
+    Width = 737
+    Height = 65
+    TabOrder = 5
+  end
+end

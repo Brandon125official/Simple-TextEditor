@@ -1,0 +1,107 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "FormFind.h"
+#include "FormMain.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+TFrmFind *FrmFind;
+//---------------------------------------------------------------------------
+__fastcall TFrmFind::TFrmFind(TComponent* Owner)
+	: TForm(Owner)
+{
+
+}
+//---------------------------------------------------------------------------
+void __fastcall TFrmFind::FormCreate(TObject *Sender)
+{
+	Memo->SelStart=0; //tempatkan kursor pada huruf pertama
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFrmFind::btnFindClick(TObject *Sender)
+{
+	int brs, klm, i, PosisiKursor, PosisiPertama, PosisiTerakhir;
+	bool ditemukan;
+	UnicodeString Cari = txtFind->Text.LowerCase(), Teks;
+
+	PosisiKursor = 0;
+	PosisiPertama = Memo->SelStart; // mulai mencari dari posisi kursor Memo
+
+
+	// hitung posisi kursor tersebut berada di baris dan kolom ke berapa
+	brs = 0; // cari mulai dari baris ke 0
+	klm = 1; // kolom 1
+
+	while (brs < Memo->Lines->Count && PosisiPertama > 0) {
+		if (PosisiPertama > Memo->Lines->Strings[brs].Length()) {
+			PosisiPertama -= Memo->Lines->Strings[brs].Length() + 2; // tandai bahwa posisi pertama kursor sudah melewati baris selanjutnya
+			PosisiKursor += Memo->Lines->Strings[brs].Length() + 2; // catat posisi kursor setiap melewati 1 baris
+			klm = 1;
+
+			if (brs < Memo->Lines->Count) {
+				brs++;
+			} else {
+				PosisiPertama = 0;
+			}
+		} else {
+			klm = PosisiPertama + 1;
+			PosisiPertama = 0;
+		}
+	}
+
+	ditemukan = false;
+
+	while (brs < Memo->Lines->Count && !ditemukan) {
+		klm = PosisiPertama + 1; // periksa mulai dari posisi kursor untuk pertama kali atau dari huruf pertama untuk looping (pencarian baris) selanjutnya
+		PosisiPertama = 0; // posisi kursor pertama kali sudah tidak digunakan lagi pada looping (pencarian baris) selanjutnya
+		Teks = Memo->Lines->Strings[brs].LowerCase();
+
+		while (klm <= Teks.Length() && !ditemukan) {
+			if (Cari[1] == Teks[klm]) { // cocokkan huruf pertama
+				PosisiTerakhir = klm;
+				ditemukan = true;
+				i = 2; // jika tidak sama maka lanjutkan periksa huruf selanjutnya
+
+				while (i <= Cari.Length() && klm + i - 1 <= Teks.Length() && ditemukan) {
+					if (Cari[i] != Teks[klm + i - 1]) {
+						ditemukan = false; // jika huruf selanjutnya tidak cocok artinya belum ditemukan
+					}
+
+					i++;
+				}
+
+				if (i < Cari.Length()) {
+					ditemukan = false; // jika jumlah huruf yang diperiksa masih kurang dari jumlah huruf yang dicari artinya string tidak sama
+				}
+			}
+			klm++;
+		}
+
+		brs++;
+
+		if (!ditemukan) {
+			PosisiKursor += Teks.Length() + 2; // posisi kursor bergeser sebesar jumlah huruf pada Lines yang dibaca ditambah 2 byte karakter pindah baris
+		}
+	}
+
+	if (ditemukan) {
+		Memo->SetFocus();
+		Memo->SelStart = PosisiKursor + PosisiTerakhir - 1;
+		Memo->SelLength = Cari.Length();
+		txtPanel->Caption = "Teks tersebut ditemukan";
+	} else {
+		txtPanel->Caption = "Teks tersebut tidak ditemukan";
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFrmFind::FormShow(TObject *Sender)
+{
+	Memo->Lines->Text = FrmMain->Memo->Lines->Text;
+}
+//---------------------------------------------------------------------------
+
